@@ -9,8 +9,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 public class TimelineActivity extends Activity {
@@ -59,6 +61,13 @@ public class TimelineActivity extends Activity {
 	// Inflate the menu; this adds items to the action bar if it is present.
 	getMenuInflater().inflate(R.menu.timeline, menu);
 	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menu) {
+	Intent i = new Intent(getApplicationContext(), NewTweet.class);
+	startActivityForResult(i, 1);
+	return false;
     }
 
 }

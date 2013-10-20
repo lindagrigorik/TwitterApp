@@ -1,6 +1,12 @@
 package com.codepath.apps.twitterapp;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.text.Html;
@@ -34,8 +40,18 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 	ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
 	
 	TextView nameView = (TextView) view.findViewById(R.id.tvName);
+	DateFormat df = new SimpleDateFormat("MM/dd/yy, hh:mm:ss");
 	
-	String formattedName="<b>"+tweet.getUser().getName()+"</b>" + " <small><font color='#777777'>@" + tweet.getUser().getScreenName()+"</font></small>";
+	//FIXME: format date string returned.
+	/*Date createdTime = null;
+        try {
+	    createdTime = df.parse(tweet.getUser().getCreatedAt());
+        } catch (ParseException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+        }*/
+        
+	String formattedName="<b>"+tweet.getUser().getName()+"</b>" + " <small><font color='#777777'>@" + tweet.getUser().getCreatedAt() +"</font></small>";
 	nameView.setText(Html.fromHtml(formattedName));
 	
 	TextView bodyView = (TextView) view.findViewById(R.id.tvBody);

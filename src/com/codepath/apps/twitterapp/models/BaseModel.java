@@ -56,4 +56,13 @@ public class BaseModel {
 	}
     }
     
+    protected String getCreatedAt(String name) {
+	try {
+	    return jsonObject.getString(name);
+	} catch (JSONException e){
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
 }
