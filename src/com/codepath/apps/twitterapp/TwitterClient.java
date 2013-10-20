@@ -33,14 +33,19 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
     
-    public void getHomeTimeLine(AsyncHttpResponseHandler handler ){
+    public void getHomeTimeLine(String maxId, AsyncHttpResponseHandler handler ){
 	String url = getApiUrl("statuses/home_timeline.json");
+	if (maxId != null) {
+	    RequestParams params = new RequestParams();
+	    params.put("max_id", maxId);
+	}
 	client.get(url, null, handler);
 	
     }
+    
     // CHANGE THIS
     // DEFINE METHODS for different API endpoints here
-    public void getInterestingnessList(AsyncHttpResponseHandler handler) {
+    public void getInterestingnessList(int maxId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
