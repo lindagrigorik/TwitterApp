@@ -6,39 +6,42 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Tweet extends BaseModel{
+public class Tweet{
 
     private User user;
+    private String body;
+    private String idStr;
+    private long id;
+    private boolean isFavorited;
     
     public User getUser() {
-	return user;
+        return user;
     }
-    
+
     public String getBody() {
-	return getString("text");
+        return body;
     }
-    
-    public String getIdStr(){
-	return getString("id_str");
+
+    public String getIdStr() {
+        return idStr;
     }
-    
-    public Long getId() {
-	return getLong("id");
+
+    public long getId() {
+        return id;
     }
-    
-    public boolean isFavorited(){
-	return getBoolean("favorited");
+
+    public boolean isFavorited() {
+        return isFavorited;
     }
-    
-    public boolean isBetweened(){
-	return getBoolean("retweeted");
-    }
-    
+
     public static Tweet fromJson(JSONObject json){
 	Tweet tweet = new Tweet();
 	
 	try {
-	    tweet.jsonObject = json;
+	    tweet.body = json.getString("text");
+	    tweet.idStr = json.getString("id_str");
+	    tweet.id = json.getLong("id");
+	    tweet.isFavorited = json.getBoolean("favorited");
 	    tweet.user = User.fromJson(json.getJSONObject("user"));
 	} catch (JSONException e) {
 	    e.printStackTrace();
