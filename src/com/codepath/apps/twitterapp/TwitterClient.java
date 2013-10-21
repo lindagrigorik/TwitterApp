@@ -35,8 +35,9 @@ public class TwitterClient extends OAuthBaseClient {
     
     public void getHomeTimeLine(String maxId, AsyncHttpResponseHandler handler ){
 	String url = getApiUrl("statuses/home_timeline.json");
+	RequestParams params = null;
 	if (maxId != null) {
-	    RequestParams params = new RequestParams();
+	    params = new RequestParams();
 	    params.put("max_id", maxId);
 	}
 	client.get(url, null, handler);
@@ -45,11 +46,12 @@ public class TwitterClient extends OAuthBaseClient {
     
     public void addTweet(String tweet, AsyncHttpResponseHandler handler){
 	String url = getApiUrl("statuses/update.json");
+	RequestParams params = null;
 	if (tweet != null && !tweet.trim().equals("")){
-	    RequestParams params = new RequestParams();
+	    params = new RequestParams();
 	    params.put("status", tweet);
 	}
-	client.get(url,  null, handler);
+	client.post(url, params, handler);
     }
     
     public void getUserInfo(AsyncHttpResponseHandler handler){

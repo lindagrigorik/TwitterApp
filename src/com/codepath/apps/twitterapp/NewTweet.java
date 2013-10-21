@@ -22,7 +22,9 @@ public class NewTweet extends Activity {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_new_tweet);
 	ImageView ivProfile = (ImageView) findViewById(R.id.ivProfile);
-	ImageLoader.getInstance().displayImage(getIntent().getStringExtra("profileUrl"), ivProfile);
+	ImageLoader.getInstance().displayImage(getIntent().getStringExtra("profile_url"), ivProfile);
+	TextView tvUser = (TextView) findViewById(R.id.tvUserName);
+	tvUser.setText("@"+getIntent().getStringExtra("user_name"));
 	EditText etTweet =  (EditText) findViewById(R.id.etTweet);
 	tvCharCount = (TextView) findViewById(R.id.tvCharCount);
 	etTweet.addTextChangedListener(mTextEditorWatcher);

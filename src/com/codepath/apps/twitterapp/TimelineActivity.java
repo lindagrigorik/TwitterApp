@@ -80,7 +80,8 @@ public class TimelineActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menu) {
 	Intent i = new Intent(getApplicationContext(), NewTweet.class);
-	i.putExtra("profileUrl", currUser.getProfileImageUrl());
+	i.putExtra("profile_url", currUser.getProfileImageUrl());
+	i.putExtra("user_name", currUser.getScreenName());
 	startActivityForResult(i, REQUEST_CODE);
 	return false;
     }
@@ -91,10 +92,15 @@ public class TimelineActivity extends Activity {
 	    
 	    TwitterApp.getRestClient().addTweet(i.getStringExtra("tweet"), new JsonHttpResponseHandler() {
 		@Override
-		public void onSuccess(JSONArray jsonResult) {
-		    tweets = Tweet.fromJson(jsonResult);
-		    maxId = tweets.get(0).getIdStr();
+		public void onSuccess(JSONObject jsonResult) {
+		    User user = User.fromJson(jsonResult);
+		    maxId = user.getIdStr();
 		    getTweets(maxId);   
+		}
+		
+		@Override
+		public void onFailure(Throwable e, JSONObject jsonResult) {
+		    Log.d("DEBUG", e.toString());
 		}
 	    });
 	}
