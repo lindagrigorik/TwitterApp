@@ -3,8 +3,10 @@ package com.codepath.apps.twitterapp;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class TimelineActivity extends Activity {
 
@@ -21,6 +24,8 @@ public class TimelineActivity extends Activity {
     private ArrayList<Tweet> tweets;
     private TweetsAdapter adapter;
     private String maxId;
+    private static final int REQUEST_CODE = 1;
+    private User currUser;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +43,25 @@ public class TimelineActivity extends Activity {
 	        getTweets(maxId);
             }
 	});
-	
+	getUser();
     }
     
+    private void getUser() {
+	TwitterApp.getRestClient().getUserInfo(new JsonHttpResponseHandler() {
+	    @Override
+	    public void onSuccess(JSONObject jsonTweets){
+		User user = User.fromJson(jsonTweets);
+		currUser = user;
+	    }
+	});
+    }
     private void getTweets(String max){
 	TwitterApp.getRestClient().getHomeTimeLine(max, new JsonHttpResponseHandler() {
 	    @Override
 	    public void onSuccess(JSONArray jsonTweets){
 		tweets = Tweet.fromJson(jsonTweets);
 		//get the maximum id to retrieve the next set of tweets.
-		maxId = Double.toString(tweets.get(tweets.size()-1).getId());
+		maxId =tweets.get(tweets.size()-1).getIdStr();
 		adapter.addAll(tweets);
 		/*TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
 		lvTweets.setAdapter(adapter);*/
@@ -66,8 +80,23 @@ public class TimelineActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menu) {
 	Intent i = new Intent(getApplicationContext(), NewTweet.class);
-	startActivityForResult(i, 1);
+	i.putExtra("profileUrl", currUser.getProfileImageUrl());
+	startActivityForResult(i, REQUEST_CODE);
 	return false;
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent i){
+	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+	    Toast.makeText(getBaseContext(), i.getStringExtra("tweet"), Toast.LENGTH_SHORT).show();
+	    
+	    TwitterApp.getRestClient().addTweet(i.getStringExtra("tweet"), new JsonHttpResponseHandler() {
+		@Override
+		public void onSuccess(JSONArray jsonResult) {
+		    tweets = Tweet.fromJson(jsonResult);
+		    maxId = tweets.get(0).getIdStr();
+		    getTweets(maxId);   
+		}
+	    });
+	}
+    }
 }

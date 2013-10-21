@@ -18,6 +18,10 @@ public class Tweet extends BaseModel{
 	return getString("text");
     }
     
+    public String getIdStr(){
+	return getString("id_str");
+    }
+    
     public Long getId() {
 	return getLong("id");
     }

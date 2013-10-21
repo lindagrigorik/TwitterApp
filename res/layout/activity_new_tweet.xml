@@ -8,25 +8,42 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".NewTweet" >
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
     <Button
         android:id="@+id/btCompose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center|left"
+        android:onClick="onTweet"
+        android:text="Tweet" />
+
+    <EditText
+        android:id="@+id/etTweet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/btCompose"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:gravity="center"
-        android:text="Tweet" />
+        android:layout_marginTop="21dp"
+        android:ems="10" />
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_twitter" />
+
+    <TextView
+        android:id="@+id/tvCharCount"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/btCompose"
+        android:layout_below="@+id/etTweet"
+        android:layout_marginTop="22dp"
+        android:gravity="right"
+        android:textSize="12sp"
+        android:text="" />
 
 </RelativeLayout>
