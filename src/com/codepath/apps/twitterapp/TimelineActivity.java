@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 public class TimelineActivity extends Activity {
 
-    private ListView lvTweets;
+    private PullToRefreshListView lvTweets;
     private ArrayList<Tweet> tweets;
     private TweetsAdapter adapter;
     private String maxId;
@@ -37,21 +37,22 @@ public class TimelineActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_timeline);
-	lvTweets = (ListView) findViewById(R.id.lvTweets);
+	lvTweets = (PullToRefreshListView) findViewById(R.id.lvTweets);
 	tweets = new ArrayList<Tweet>();
 	adapter = new TweetsAdapter(getBaseContext(), tweets);
 	lvTweets.setAdapter(adapter);
 	getTweets(null);
-	/*lvTweets.setOnRefreshListener(new OnRefreshListener() {
+	lvTweets.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list contents
                 // Make sure you call listView.onRefreshComplete()
                 // once the loading is done. This can be done from here or any
                 // place such as when the network request has completed successfully.
-                getTweets(maxId);
+        	adapter.clear();
+                getTweets(null);
             }
-        });*/
+        });
 	lvTweets.setOnScrollListener(new EndlessScrollListener(){
 	    @Override
             public void loadMore(int page, int totalItemsCount) {
@@ -81,7 +82,7 @@ public class TimelineActivity extends Activity {
 		adapter.addAll(tweets);
 		/*TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
 		lvTweets.setAdapter(adapter);*/
-		//lvTweets.onRefreshComplete();
+		lvTweets.onRefreshComplete();
 		Log.d("DEBUG", jsonTweets.toString());
 	    }
 	    
@@ -108,6 +109,7 @@ public class TimelineActivity extends Activity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent i){
+	//FIXME: Get the latest tweet I added and add to adapter!!!
 	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 	    Toast.makeText(getBaseContext(), i.getStringExtra("tweet"), Toast.LENGTH_SHORT).show();
 	    
