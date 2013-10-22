@@ -9,6 +9,12 @@ import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import eu.erikw.PullToRefreshListView;
+import eu.erikw.PullToRefreshListView.OnRefreshListener;
+
+//import eu.erikw.PullToRefreshListView;
+//import eu.erikw.PullToRefreshListView.OnRefreshListener;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -36,6 +42,16 @@ public class TimelineActivity extends Activity {
 	adapter = new TweetsAdapter(getBaseContext(), tweets);
 	lvTweets.setAdapter(adapter);
 	getTweets(null);
+	/*lvTweets.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list contents
+                // Make sure you call listView.onRefreshComplete()
+                // once the loading is done. This can be done from here or any
+                // place such as when the network request has completed successfully.
+                getTweets(maxId);
+            }
+        });*/
 	lvTweets.setOnScrollListener(new EndlessScrollListener(){
 	    @Override
             public void loadMore(int page, int totalItemsCount) {
@@ -65,7 +81,12 @@ public class TimelineActivity extends Activity {
 		adapter.addAll(tweets);
 		/*TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
 		lvTweets.setAdapter(adapter);*/
+		//lvTweets.onRefreshComplete();
 		Log.d("DEBUG", jsonTweets.toString());
+	    }
+	    
+	    public void onFailure(Throwable e){
+		Log.d("DEBUG", e.toString());
 	    }
 	});
     }
