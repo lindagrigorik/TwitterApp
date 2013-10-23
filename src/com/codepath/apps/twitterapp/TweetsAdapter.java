@@ -10,6 +10,8 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +42,17 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 	ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
 	
 	TextView nameView = (TextView) view.findViewById(R.id.tvName);
-	DateFormat df = new SimpleDateFormat("MM/dd/yy, hh:mm:ss");
-	
-	//FIXME: format date string returned.
-	/*Date createdTime = null;
+	SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
+        String d = tweet.getCreatedAt();
+        Date createdDate = new Date();
         try {
-	    createdTime = df.parse(tweet.getUser().getCreatedAt());
+            createdDate = format.parse(d);
         } catch (ParseException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-        }*/
+            Log.d("DEBUG", e.getMessage());
+        }
         
-	String formattedName="<b>"+tweet.getUser().getName()+"</b>" + " <small><font color='#777777'>@" + tweet.getUser().getCreatedAt() +"</font></small>";
+        String timeAgo = (String) DateUtils.getRelativeTimeSpanString(createdDate.getTime(), new Date().getTime(), DateUtils.MINUTE_IN_MILLIS);
+	String formattedName="<b>"+tweet.getUser().getName()+"</b>" + " <small><font color='#777777'>@ " + timeAgo +"</font></small>";
 	nameView.setText(Html.fromHtml(formattedName));
 	
 	TextView bodyView = (TextView) view.findViewById(R.id.tvBody);

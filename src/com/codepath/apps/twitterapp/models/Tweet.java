@@ -13,6 +13,11 @@ public class Tweet{
     private String idStr;
     private long id;
     private boolean isFavorited;
+    private String createdAt;
+    
+    public String getCreatedAt(){
+	return createdAt;
+    }
     
     public User getUser() {
         return user;
@@ -42,6 +47,7 @@ public class Tweet{
 	    tweet.idStr = json.getString("id_str");
 	    tweet.id = json.getLong("id");
 	    tweet.isFavorited = json.getBoolean("favorited");
+	    tweet.createdAt = json.getString("created_at");
 	    tweet.user = User.fromJson(json.getJSONObject("user"));
 	} catch (JSONException e) {
 	    e.printStackTrace();

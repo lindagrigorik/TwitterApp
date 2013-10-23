@@ -109,16 +109,13 @@ public class TimelineActivity extends Activity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent i){
-	//FIXME: Get the latest tweet I added and add to adapter!!!
 	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-	    Toast.makeText(getBaseContext(), i.getStringExtra("tweet"), Toast.LENGTH_SHORT).show();
-	    
 	    TwitterApp.getRestClient().addTweet(i.getStringExtra("tweet"), new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONObject jsonResult) {
-		    User user = User.fromJson(jsonResult);
-		    maxId = user.getIdStr();
-		    getTweets(maxId);   
+		    Tweet tweet = Tweet.fromJson(jsonResult);
+		    adapter.clear();
+	            getTweets(null);
 		}
 		
 		@Override
