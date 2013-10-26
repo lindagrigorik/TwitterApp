@@ -1,19 +1,30 @@
 package com.codepath.apps.twitterapp.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Tweet{
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
-    private User user;
-    private String body;
-    private String idStr;
-    private long id;
-    private boolean isFavorited;
-    private String createdAt;
+@Table(name="Tweet")
+public class Tweet extends Model{
+
+    @Column(name="User")
+    public User user;
+    @Column(name="Body")
+    public String body;
+    @Column(name="IdStr")
+    public String idStr;
+    @Column(name="IsFavorited")
+    public boolean isFavorited;
+    @Column(name="CreatedAt")
+    public String createdAt;
     
     public String getCreatedAt(){
 	return createdAt;
@@ -30,11 +41,7 @@ public class Tweet{
     public String getIdStr() {
         return idStr;
     }
-
-    public long getId() {
-        return id;
-    }
-
+    
     public boolean isFavorited() {
         return isFavorited;
     }
@@ -45,7 +52,6 @@ public class Tweet{
 	try {
 	    tweet.body = json.getString("text");
 	    tweet.idStr = json.getString("id_str");
-	    tweet.id = json.getLong("id");
 	    tweet.isFavorited = json.getBoolean("favorited");
 	    tweet.createdAt = json.getString("created_at");
 	    tweet.user = User.fromJson(json.getJSONObject("user"));
@@ -70,10 +76,14 @@ public class Tweet{
 	    Tweet tweet = Tweet.fromJson(tweetJson);
 	    if (tweet != null) {
 		tweets.add(tweet);
+		tweet.save();
 	    }
 	}
 	return tweets;
-	
     }
     
+    public static List<Tweet> getMostRecent(){
+	return new Select().from(Tweet.class)
+			.orderBy("CreatedAt ASC").execute();
+    }
 }

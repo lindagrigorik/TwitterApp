@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -15,13 +16,15 @@ import eu.erikw.PullToRefreshListView.OnRefreshListener;
 //import eu.erikw.PullToRefreshListView;
 //import eu.erikw.PullToRefreshListView.OnRefreshListener;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class TimelineActivity extends Activity {
@@ -37,30 +40,39 @@ public class TimelineActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_timeline);
+	
 	lvTweets = (PullToRefreshListView) findViewById(R.id.lvTweets);
 	tweets = new ArrayList<Tweet>();
 	adapter = new TweetsAdapter(getBaseContext(), tweets);
 	lvTweets.setAdapter(adapter);
 	getTweets(null);
 	lvTweets.setOnRefreshListener(new OnRefreshListener() {
-            @Override
+        @Override
             public void onRefresh() {
-                // Your code to refresh the list contents
-                // Make sure you call listView.onRefreshComplete()
-                // once the loading is done. This can be done from here or any
-                // place such as when the network request has completed successfully.
+            // Your code to refresh the list contents
+            // Make sure you call listView.onRefreshComplete()
+            // once the loading is done. This can be done from here or any
+            // place such as when the network request has completed successfully.
         	adapter.clear();
                 getTweets(null);
             }
-        });
+	    });
 	lvTweets.setOnScrollListener(new EndlessScrollListener(){
-	    @Override
-            public void loadMore(int page, int totalItemsCount) {
-	        // TODO Auto-generated method stub
-	        getTweets(maxId);
-            }
+	@Override
+        public void loadMore(int page, int totalItemsCount) {
+	    // TODO Auto-generated method stub
+	    getTweets(maxId);
+        }
 	});
 	getUser();
+
+	//database test.
+	//User u = getRandom();
+	//Toast.makeText(getBaseContext(), u.getName(), Toast.LENGTH_SHORT).show();
+    }
+    
+    public static User getRandom() {
+	return new Select().from(User.class).orderBy("RANDOM()").executeSingle();
     }
     
     private void getUser() {
@@ -72,24 +84,38 @@ public class TimelineActivity extends Activity {
 	    }
 	});
     }
+    
     private void getTweets(String max){
-	TwitterApp.getRestClient().getHomeTimeLine(max, new JsonHttpResponseHandler() {
-	    @Override
-	    public void onSuccess(JSONArray jsonTweets){
-		tweets = Tweet.fromJson(jsonTweets);
-		//get the maximum id to retrieve the next set of tweets.
-		maxId =tweets.get(tweets.size()-1).getIdStr();
-		adapter.addAll(tweets);
-		/*TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
-		lvTweets.setAdapter(adapter);*/
-		lvTweets.onRefreshComplete();
-		Log.d("DEBUG", jsonTweets.toString());
-	    }
+	ConnectivityManager cm =
+	        (ConnectivityManager)getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+	NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+	boolean isConnected = activeNetwork != null &&
+	                      activeNetwork.isConnectedOrConnecting();
+
+	if (!isConnected){
+	    ArrayList<Tweet> tweets = new Select().from(Tweet.class).orderBy("IdStr DESC").limit("20").execute();
+	    adapter.clear();
+	    adapter.addAll(tweets);
+	    //Toast.makeText(getBaseContext(), "TIME TO LOAD LOCAL DATA", Toast.LENGTH_SHORT).show();
+	} else {
+	    TwitterApp.getRestClient().getHomeTimeLine(max, new JsonHttpResponseHandler() {
+		@Override
+		public void onSuccess(JSONArray jsonTweets){
+		    tweets = Tweet.fromJson(jsonTweets);
+		    //get the maximum id to retrieve the next set of tweets.
+		    maxId =tweets.get(tweets.size()-1).getIdStr();
+		    adapter.addAll(tweets);
+		    /*TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
+			lvTweets.setAdapter(adapter);*/
+		    lvTweets.onRefreshComplete();
+		    Log.d("DEBUG", jsonTweets.toString());
+		}
 	    
-	    public void onFailure(Throwable e){
-		Log.d("DEBUG", e.toString());
-	    }
-	});
+		public void onFailure(Throwable e){
+		    Log.d("DEBUG", e.toString());
+		}
+	    });
+	}
     }
 
     @Override
@@ -101,11 +127,20 @@ public class TimelineActivity extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem menu) {
-	Intent i = new Intent(getApplicationContext(), NewTweet.class);
-	i.putExtra("profile_url", currUser.getProfileImageUrl());
-	i.putExtra("user_name", currUser.getScreenName());
-	startActivityForResult(i, REQUEST_CODE);
-	return false;
+	ConnectivityManager cm =
+	        (ConnectivityManager)getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+	NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+	boolean isConnected = activeNetwork != null &&
+	                      activeNetwork.isConnectedOrConnecting();
+	if (isConnected) {
+    		Intent i = new Intent(getApplicationContext(), NewTweet.class);
+    		i.putExtra("profile_url", currUser.getProfileImageUrl());
+    		i.putExtra("user_name", currUser.getScreenName());
+    		startActivityForResult(i, REQUEST_CODE);
+	} else {
+	    Toast.makeText(getBaseContext(), "NO INTERNET CONNECTION", Toast.LENGTH_SHORT).show();
+	}
+    		return false;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent i){
