@@ -22,6 +22,11 @@ public class User extends Model{
     public int followersCount;
     @Column(name="CreatedAt")
     public String createdAt;
+    @Column(name="tagline")
+    public String tagline;
+    @Column(name="friendsCount")
+    public int friendsCount;
+    
 
     public User(){
 	super();
@@ -59,6 +64,14 @@ public class User extends Model{
     public String getCreatedAt() {
         return createdAt;
     }
+    
+    public String getTagline() {
+	return tagline;
+    }
+    
+    public int getFriendsCount(){
+	return friendsCount;
+    }
 
 
     public static User fromJson(JSONObject json) {
@@ -70,8 +83,10 @@ public class User extends Model{
 	    u.screenName = json.getString("screen_name");
 	    u.profileImageUrl = json.getString("profile_image_url");
 	    u.numTweets = json.getInt("statuses_count");
-	    u.followersCount = json.getInt("friends_count");
+	    u.followersCount = json.getInt("followers_count");
 	    u.createdAt = json.getString("created_at");
+	    u.tagline=json.getString("description");
+	    u.friendsCount=json.getInt("friends_count");
 	    u.save();
 	} catch (Exception e) {
 	    e.printStackTrace();
