@@ -52,31 +52,9 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	setContentView(R.layout.activity_timeline);
 	//fragmentTweets = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentTweets);
 	this.setUpNavigationTabs();
-	
-	//tweets = new ArrayList<Tweet>();
-	
-	
-	//getTweets(null);
-	/*lvTweets.setOnRefreshListener(new OnRefreshListener() {
-        @Override
-            public void onRefresh() {
-            // Your code to refresh the list contents
-            // Make sure you call listView.onRefreshComplete()
-            // once the loading is done. This can be done from here or any
-            // place such as when the network request has completed successfully.
-        	adapter.clear();
-                getTweets(null);
-            }
-	    });
-	lvTweets.setOnScrollListener(new EndlessScrollListener(){
-	@Override
-        public void loadMore(int page, int totalItemsCount) {
-	    // TODO Auto-generated method stub
-	    getTweets(maxId);
-        }
-	});*/
-	getUser();
+	//getActionBar().setSelectedNavigationItem(0)
 
+	getUser();
 	//database test.
 	//User u = getRandom();
 	//Toast.makeText(getBaseContext(), u.getName(), Toast.LENGTH_SHORT).show();
@@ -99,11 +77,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	actionBar.addTab(tabMentions);
 	actionBar.selectTab(tabHome);
     }
-    
-    public static User getRandom() {
-	return new Select().from(User.class).orderBy("RANDOM()").executeSingle();
-    }
-    
+
     private void getUser() {
 	TwitterApp.getRestClient().getUserInfo(new JsonHttpResponseHandler() {
 	    @Override
@@ -129,11 +103,20 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 	boolean isConnected = activeNetwork != null &&
 	                      activeNetwork.isConnectedOrConnecting();
+	Intent i;
 	if (isConnected) {
-    		Intent i = new Intent(getApplicationContext(), NewTweet.class);
+	    switch (menu.getItemId()) {
+	    case R.id.action_tweet:
+    		i = new Intent(getApplicationContext(), NewTweet.class);
     		i.putExtra("profile_url", currUser.getProfileImageUrl());
     		i.putExtra("user_name", currUser.getScreenName());
     		startActivityForResult(i, REQUEST_CODE);
+    		return true;
+	    case R.id.action_profile:
+		i = new Intent(this, ProfileActivity.class);
+		startActivity(i);
+		return true;
+	    }
 	} else {
 	    Toast.makeText(getBaseContext(), "NO INTERNET CONNECTION", Toast.LENGTH_SHORT).show();
 	}
@@ -146,8 +129,15 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 		@Override
 		public void onSuccess(JSONObject jsonResult) {
 		    Tweet tweet = Tweet.fromJson(jsonResult);
-		    fragmentTweets.getAdapter().clear();
-	            //getTweets(null);
+		    ActionBar actionBar = getActionBar();
+		    FragmentManager manager = getSupportFragmentManager();
+			android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
+			if (actionBar.getSelectedTab().getTag().equals("HomeTimelineFragment")){
+			    fts.replace(R.id.frame_container, new HomeTimelineFragment());
+			} else {
+			    fts.replace(R.id.frame_container, new MentionsFragment());
+			}
+			fts.commit();
 		}
 		
 		@Override
@@ -181,9 +171,5 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	// TODO Auto-generated method stub
 	
     }
-    
-    public void onProfileView(MenuItem mi) {
-	Intent i = new Intent(this, ProfileActivity.class);
-	startActivity(i);
-    }
+
 }

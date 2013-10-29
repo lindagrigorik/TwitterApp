@@ -18,7 +18,12 @@ public class UserTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
 	// TODO Auto-generated method stub
 	super.onCreate(savedInstanceState);
+	getTweets(null);
 	
+    }
+    @Override
+    public void getTweets(String maxId) {
+	// TODO Auto-generated method stub
 	 TwitterApp.getRestClient().getUserTimeline(new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){

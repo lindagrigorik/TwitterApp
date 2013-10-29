@@ -9,5 +9,7 @@
     <string name="title_activity_timeline">TwEEtssss</string>
     <string name="title_activity_new_tweet">Compose</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_tweet">Tweet</string>
 
 </resources>

@@ -1,17 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_compose"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_settings"/>-->
+        <item
+	        android:id="@+id/action_tweet"
+	        android:orderInCategory="100"
+	        android:icon="@drawable/ic_compose"
+	        android:showAsAction="ifRoom"
+	        android:title="@string/action_tweet"/>
         
         <item
-            android:id="@+id/item1"
+            android:id="@+id/action_profile"
             android:showAsAction="ifRoom"
             android:icon="@drawable/ic_action_profile"
-            android:onClick="onProfileView"
-            android:title="Profile">
+            android:title="@string/action_profile">
         </item>
 </menu>
