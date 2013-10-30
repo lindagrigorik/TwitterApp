@@ -21,13 +21,12 @@ public class UserTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
 	// TODO Auto-generated method stub
 	super.onCreate(savedInstanceState);
+	userId = getActivity().getIntent().getStringExtra("userId");
     }
     
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);
-	//TODO: QUESTION: when I try to retrieve the param that was passed in through intent, should I retrieve it here or in onCreate()
-	userId = getActivity().getIntent().getStringExtra("userId");
     }
     
     @Override
