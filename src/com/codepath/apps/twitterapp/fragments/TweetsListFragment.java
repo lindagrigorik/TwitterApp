@@ -48,7 +48,7 @@ public abstract class TweetsListFragment extends Fragment {
 	            // Make sure you call listView.onRefreshComplete()
 	            // once the loading is done. This can be done from here or any
 	            // place such as when the network request has completed successfully.
-	        	getAdapter().clear();
+	        	adapter.clear();
 	                getTweets(null);
 	            }
 	});
@@ -70,14 +70,10 @@ public abstract class TweetsListFragment extends Fragment {
 	if (tweets.size() > 0) {
 	    	Long maxVal = tweets.get(tweets.size()-1).getId()-1;
 		maxId = maxVal.toString();
-		getAdapter().addAll(tweets);
+		adapter.addAll(tweets);
 		//adapter.notifyAll();
 		getView().onRefreshComplete();
 	}
-    }
-    
-    public TweetsAdapter getAdapter() {
-	return adapter;
     }
     
     public PullToRefreshListView  getView() {

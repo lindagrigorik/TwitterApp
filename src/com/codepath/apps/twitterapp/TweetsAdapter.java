@@ -55,6 +55,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 	
 	
 	TextView nameView = (TextView) view.findViewById(R.id.tvName);
+	TextView timeView = (TextView) view.findViewById(R.id.tvTime);
 	SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
         String d = tweet.getCreatedAt();
         Date createdDate = new Date();
@@ -65,8 +66,10 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
         }
         
         String timeAgo = (String) DateUtils.getRelativeTimeSpanString(createdDate.getTime(), new Date().getTime(), DateUtils.MINUTE_IN_MILLIS);
-	String formattedName="<b>"+tweet.getUser().getName()+"</b>" + " <small><font color='#777777'>@ " + timeAgo +"</font></small>";
+	String formattedName="<b>"+tweet.getUser().getName()+"</b>";
 	nameView.setText(Html.fromHtml(formattedName));
+        String formmattedTime = "<small><font color='#777777'>@ " + timeAgo +"</font></small>";
+	timeView.setText(Html.fromHtml(formmattedTime));
 	
 	TextView bodyView = (TextView) view.findViewById(R.id.tvBody);
 	bodyView.setText(Html.fromHtml(tweet.getBody()));
