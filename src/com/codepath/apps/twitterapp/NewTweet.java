@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ public class NewTweet extends Activity {
 
         public void afterTextChanged(Editable s) {
         }
-};
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,13 +59,14 @@ public class NewTweet extends Activity {
 	return true;
     }
     
-    public void onTweet(View v){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menu) {
 	EditText etTweet = (EditText) findViewById(R.id.etTweet);
 	String tweet = etTweet.getText().toString();
 	Intent i = new Intent();
 	i.putExtra("tweet", tweet);
 	setResult(RESULT_OK, i);
 	finish();
+	return false;
     }
-
 }

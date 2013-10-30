@@ -112,7 +112,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	} else {
 	    Toast.makeText(getBaseContext(), "NO INTERNET CONNECTION", Toast.LENGTH_SHORT).show();
 	}
-    		return false;
+	return false;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent i){

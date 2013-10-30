@@ -11,5 +11,6 @@
     <string name="title_activity_profile">Profile</string>
     <string name="action_profile">Profile</string>
     <string name="action_tweet">Tweet</string>
+    <string name="happening">What\'s happening</string>
 
 </resources>
