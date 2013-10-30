@@ -100,8 +100,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	    switch (menu.getItemId()) {
 	    case R.id.action_tweet:
     		i = new Intent(getApplicationContext(), NewTweet.class);
-    		i.putExtra("profile_url", currUser.getProfileImageUrl());
-    		i.putExtra("user_name", currUser.getScreenName());
+    		i.putExtra("user", currUser);
     		startActivityForResult(i, REQUEST_CODE);
     		return true;
 	    case R.id.action_profile:

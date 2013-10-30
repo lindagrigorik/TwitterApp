@@ -42,11 +42,22 @@
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_alignLeft="@+id/tvName"
+        android:layout_toRightOf="@+id/ivProfile"
+        android:textStyle="bold"
+        android:gravity="center" />
+    
+      <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivProfile"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/ivProfile"
         android:textStyle="bold"
         android:gravity="center" />
+    
 
     <EditText
         android:id="@+id/etTweet"

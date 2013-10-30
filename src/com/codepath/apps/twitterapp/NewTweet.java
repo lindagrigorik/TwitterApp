@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterapp;
 
+import com.codepath.apps.twitterapp.models.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.os.Bundle;
@@ -21,12 +22,15 @@ public class NewTweet extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_new_tweet);
+	User user = (User) getIntent().getSerializableExtra("user");
 	ImageView ivProfile = (ImageView) findViewById(R.id.ivProfile);
-	ImageLoader.getInstance().displayImage(getIntent().getStringExtra("profile_url"), ivProfile);
+	ImageLoader.getInstance().displayImage(user.profileImageUrl, ivProfile);
 	TextView tvUser = (TextView) findViewById(R.id.tvUserName);
-	tvUser.setText("@"+getIntent().getStringExtra("user_name"));
+	tvUser.setText("@"+user.getScreenName());
 	EditText etTweet =  (EditText) findViewById(R.id.etTweet);
 	tvCharCount = (TextView) findViewById(R.id.tvCharCount);
+	TextView tvName = (TextView) findViewById(R.id.tvName);
+	tvName.setText(user.getName());
 	etTweet.addTextChangedListener(mTextEditorWatcher);
     }
 
