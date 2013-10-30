@@ -9,6 +9,7 @@ import com.activeandroid.query.Select;
 import com.codepath.apps.twitterapp.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterapp.fragments.MentionsFragment;
 import com.codepath.apps.twitterapp.fragments.TweetsListFragment;
+import com.codepath.apps.twitterapp.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -56,17 +57,23 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	ActionBar actionBar = getActionBar();
 	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	actionBar.setDisplayShowTitleEnabled(true);
-	Tab tabHome = actionBar.newTab().setText("Home")
+	Tab tabHome = actionBar.newTab()
 		.setTag("HomeTimelineFragment")
 		.setIcon(R.drawable.ic_action_home)
 		.setTabListener(this);
-	Tab tabMentions = actionBar.newTab().setText("mentions")
+	Tab tabMentions = actionBar.newTab()
 		.setTag("MentionsFragment")
 		.setIcon(R.drawable.ic_action_at)
 		.setTabListener(this);
 	
+	Tab tabProfile = actionBar.newTab()
+		.setTag("UserTimelineFragment")
+		.setIcon(R.drawable.ic_action_profile)
+		.setTabListener(this);
+	
 	actionBar.addTab(tabHome);
 	actionBar.addTab(tabMentions);
+	actionBar.addTab(tabProfile);
 	actionBar.selectTab(tabHome);
     }
 
@@ -151,7 +158,9 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 	if (tab.getTag().equals("HomeTimelineFragment")){
 	    fts.replace(R.id.frame_container, new HomeTimelineFragment());
-	} else {
+	} else if (tab.getTag().equals("UserTimelineFragment")) {
+	    fts.replace(R.id.frame_container, new UserTimelineFragment());
+    	}else {
 	    fts.replace(R.id.frame_container, new MentionsFragment());
 	}
 	fts.commit();

@@ -26,14 +26,12 @@ public abstract class TweetsListFragment extends Fragment {
     private String maxId;
     
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-	// TODO Auto-generated method stub
-	lvTweets = (PullToRefreshListView) getActivity().findViewById(R.id.lvTweets);
+    public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	//lvTweets = (PullToRefreshListView) getActivity().findViewById(R.id.lvTweets);
 	ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 	adapter = new TweetsAdapter(getActivity(), tweets);
-	lvTweets.setAdapter(adapter);
 	
-	super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -41,7 +39,8 @@ public abstract class TweetsListFragment extends Fragment {
 	// TODO Auto-generated method stub
 	
 	View v =  inflater.inflate(R.layout.fragments_tweets_list, parent, false);
-	PullToRefreshListView lvTweets = (PullToRefreshListView) v.findViewById(R.id.lvTweets);
+	lvTweets = (PullToRefreshListView) v.findViewById(R.id.lvTweets);
+	lvTweets.setAdapter(adapter);
 	lvTweets.setOnRefreshListener(new OnRefreshListener() {
 	        @Override
 	            public void onRefresh() {
@@ -72,6 +71,7 @@ public abstract class TweetsListFragment extends Fragment {
 	    	Long maxVal = tweets.get(tweets.size()-1).getId()-1;
 		maxId = maxVal.toString();
 		getAdapter().addAll(tweets);
+		//adapter.notifyAll();
 		getView().onRefreshComplete();
 	}
     }
