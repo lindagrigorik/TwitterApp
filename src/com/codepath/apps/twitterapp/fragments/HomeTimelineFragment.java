@@ -53,12 +53,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
 	    TwitterApp.getRestClient().getHomeTimeLine(max, new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){
-		    /*tweets = Tweet.fromJson(jsonTweets);
-		    Long maxVal = Long.parseLong(tweets.get(tweets.size()-1).getIdStr()) -1;
-		    String maxId = maxVal.toString();
-		    setMax(maxId);
-		    getAdapter().addAll(tweets);
-		    getView().onRefreshComplete();*/
 		    addToAdapter(jsonTweets);
 		}
 	    

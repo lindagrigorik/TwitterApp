@@ -40,15 +40,6 @@ public class MentionsFragment extends TweetsListFragment {
 	TwitterApp.getRestClient().getMentions(max, new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){
-		    /*tweets = Tweet.fromJson(jsonTweets);
-		    if (tweets.size() > 0) {
-			Long maxVal = Long.parseLong(tweets.get(tweets.size()-1).getIdStr()) -1;
-			String maxId = maxVal.toString();
-			setMax(maxId);
-			getAdapter().addAll(tweets);
-			getView().onRefreshComplete();
-		    
-		    }*/
 		    addToAdapter(jsonTweets);
 		}
 	    
