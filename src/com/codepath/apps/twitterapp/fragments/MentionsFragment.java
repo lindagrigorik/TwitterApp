@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 public class MentionsFragment extends TweetsListFragment {
 
     private ArrayList<Tweet> tweets;
-    private String maxId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,17 +37,19 @@ public class MentionsFragment extends TweetsListFragment {
     
     @Override
     public void getTweets(String max){
-	TwitterApp.getRestClient().getMentions(maxId, new JsonHttpResponseHandler() {
+	TwitterApp.getRestClient().getMentions(max, new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){
-		    tweets = Tweet.fromJson(jsonTweets);
+		    /*tweets = Tweet.fromJson(jsonTweets);
 		    if (tweets.size() > 0) {
 			Long maxVal = Long.parseLong(tweets.get(tweets.size()-1).getIdStr()) -1;
-			maxId = maxVal.toString();
+			String maxId = maxVal.toString();
+			setMax(maxId);
 			getAdapter().addAll(tweets);
 			getView().onRefreshComplete();
 		    
-		    }
+		    }*/
+		    addToAdapter(jsonTweets);
 		}
 	    
 		public void onFailure(Throwable e){

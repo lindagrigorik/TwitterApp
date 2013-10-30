@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -39,7 +41,18 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 	Tweet tweet = getItem(pos);
 	
 	ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
+	imageView.setClickable(true);
+	imageView.setTag(tweet.getUser().getIdStr());
+	imageView.setOnClickListener(new OnClickListener(){
+	    @Override
+	        public void onClick(View v) {
+		    Intent i = new Intent(getContext(), ProfileActivity.class);
+		    i.putExtra("userId", v.getTag().toString());
+		    getContext().startActivity(i);
+	    }
+	});
 	ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
+	
 	
 	TextView nameView = (TextView) view.findViewById(R.id.tvName);
 	SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);

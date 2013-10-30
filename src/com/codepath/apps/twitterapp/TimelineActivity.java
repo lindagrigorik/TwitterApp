@@ -37,11 +37,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class TimelineActivity extends FragmentActivity implements TabListener {
-
     
-    private ArrayList<Tweet> tweets;
-    
-    private String maxId;
     private static final int REQUEST_CODE = 1;
     private User currUser;
     private TweetsListFragment fragmentTweets;
@@ -53,11 +49,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	//fragmentTweets = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentTweets);
 	this.setUpNavigationTabs();
 	//getActionBar().setSelectedNavigationItem(0)
-
 	getUser();
-	//database test.
-	//User u = getRandom();
-	//Toast.makeText(getBaseContext(), u.getName(), Toast.LENGTH_SHORT).show();
     }
     
     private void setUpNavigationTabs() {
@@ -114,6 +106,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
     		return true;
 	    case R.id.action_profile:
 		i = new Intent(this, ProfileActivity.class);
+		i.putExtra("userId", currUser.getIdStr());
 		startActivity(i);
 		return true;
 	    }
@@ -128,7 +121,6 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	    TwitterApp.getRestClient().addTweet(i.getStringExtra("tweet"), new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONObject jsonResult) {
-		    Tweet tweet = Tweet.fromJson(jsonResult);
 		    ActionBar actionBar = getActionBar();
 		    FragmentManager manager = getSupportFragmentManager();
 			android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();

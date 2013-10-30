@@ -66,15 +66,15 @@ public abstract class TweetsListFragment extends Fragment {
     
     public abstract void getTweets(String maxId);
     
-    /*protected void addToAdapter(JSONArray jsonTweets){
-	 tweets = Tweet.fromJson(jsonTweets);
-	    if (tweets.size() > 0) {
+    protected void addToAdapter(JSONArray jsonTweets){
+	tweets = Tweet.fromJson(jsonTweets);
+	if (tweets.size() > 0) {
 		Long maxVal = Long.parseLong(tweets.get(tweets.size()-1).getIdStr()) -1;
 		maxId = maxVal.toString();
 		getAdapter().addAll(tweets);
-	    //getView().onRefreshComplete();
-	    }
-    }*/
+		getView().onRefreshComplete();
+	}
+    }
     
     public TweetsAdapter getAdapter() {
 	return adapter;
@@ -82,5 +82,9 @@ public abstract class TweetsListFragment extends Fragment {
     
     public PullToRefreshListView  getView() {
 	return lvTweets;
+    }
+    
+    protected void setMax(String max){
+	maxId = max;
     }
 }

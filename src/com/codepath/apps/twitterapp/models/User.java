@@ -1,5 +1,7 @@
 package com.codepath.apps.twitterapp.models;
 
+import java.io.Serializable;
+
 import org.json.JSONObject;
 
 import com.activeandroid.Model;
@@ -7,7 +9,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 @Table(name="User")
-public class User extends Model{
+public class User extends Model implements Serializable{
     @Column(name="Name")
     public String name;
     @Column(name="IdStr")
@@ -26,7 +28,6 @@ public class User extends Model{
     public String tagline;
     @Column(name="friendsCount")
     public int friendsCount;
-    
 
     public User(){
 	super();
@@ -72,7 +73,6 @@ public class User extends Model{
     public int getFriendsCount(){
 	return friendsCount;
     }
-
 
     public static User fromJson(JSONObject json) {
 	User u = new User();

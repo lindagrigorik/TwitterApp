@@ -21,7 +21,6 @@ import android.widget.ListView;
 
 public class HomeTimelineFragment extends TweetsListFragment {
 
-    private String maxId;
     private ArrayList<Tweet> tweets;
     
     @Override
@@ -54,14 +53,13 @@ public class HomeTimelineFragment extends TweetsListFragment {
 	    TwitterApp.getRestClient().getHomeTimeLine(max, new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){
-		    tweets = Tweet.fromJson(jsonTweets);
-		    //get the maximum id to retrieve the next set of tweets.
+		    /*tweets = Tweet.fromJson(jsonTweets);
 		    Long maxVal = Long.parseLong(tweets.get(tweets.size()-1).getIdStr()) -1;
-		    maxId = maxVal.toString();
+		    String maxId = maxVal.toString();
+		    setMax(maxId);
 		    getAdapter().addAll(tweets);
-		    getView().onRefreshComplete();
-		    Log.d("DEBUG", jsonTweets.toString());
-		  
+		    getView().onRefreshComplete();*/
+		    addToAdapter(jsonTweets);
 		}
 	    
 		public void onFailure(Throwable e){
