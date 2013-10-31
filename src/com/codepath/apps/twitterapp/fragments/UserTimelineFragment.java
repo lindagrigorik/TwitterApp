@@ -12,16 +12,25 @@ import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+// DYNAMIC FRAGMENT
 public class UserTimelineFragment extends TweetsListFragment {
 
     private ArrayList<Tweet> tweets;
-    private String userId;
+    
+    // UserTimelineFragment.newInstance(userId)
+    public static UserTimelineFragment newInstance(String userId) {
+	UserTimelineFragment fragmentDemo = new UserTimelineFragment();
+        Bundle args = new Bundle();
+        args.putString("userId", userId);
+        fragmentDemo.setArguments(args);
+        return fragmentDemo;
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	// TODO Auto-generated method stub
 	super.onCreate(savedInstanceState);
-	userId = getActivity().getIntent().getStringExtra("userId");
+	//userId = getActivity().getIntent().getStringExtra("userId");
     }
     
     @Override
@@ -32,7 +41,8 @@ public class UserTimelineFragment extends TweetsListFragment {
     @Override
     public void getTweets(String max) {
 	// TODO Auto-generated method stub
-	
+	if (max== null) clearAdapter();
+	String userId = getArguments().getString("userId");
 	 TwitterApp.getRestClient().getUserTimeline(userId, max, new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray jsonTweets){
@@ -44,5 +54,4 @@ public class UserTimelineFragment extends TweetsListFragment {
 		}
 	    });
     }
-
 }

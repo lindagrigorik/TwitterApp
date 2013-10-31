@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.codepath.apps.twitterapp.fragments.TweetsListFragment;
+import com.codepath.apps.twitterapp.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -13,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +26,19 @@ public class ProfileActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_profile);
+	// static fragments have been fully created 
+	// dynamic fragment are blank frame layouts
 	String userId = getIntent().getStringExtra("userId");
 	getUser(userId);
+	/*UserTimelineFragment f = (UserTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentUserTimeline);
+	Bundle args = new Bundle();
+	args.putString("userId", userId);
+	f.clearAdapter();
+	f.setUserId(userId);
+	f.getTweets(null);*/
+	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+	ft.replace(R.id.flContainer, UserTimelineFragment.newInstance(userId));
+	ft.commit();
     }
     
     private void getUser(String userId) {

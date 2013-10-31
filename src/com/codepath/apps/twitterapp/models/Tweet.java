@@ -21,6 +21,8 @@ public class Tweet extends Model{
     public String body;
     @Column(name="IdStr")
     public String idStr;
+    @Column(name="tweetId")
+    public long tweetId;
     @Column(name="IsFavorited")
     public boolean isFavorited;
     @Column(name="CreatedAt")
@@ -45,6 +47,10 @@ public class Tweet extends Model{
     public boolean isFavorited() {
         return isFavorited;
     }
+    
+    public long getTweetId() {
+        return tweetId;
+    }
 
     public static Tweet fromJson(JSONObject json){
 	Tweet tweet = new Tweet();
@@ -54,6 +60,7 @@ public class Tweet extends Model{
 	    tweet.idStr = json.getString("id_str");
 	    tweet.isFavorited = json.getBoolean("favorited");
 	    tweet.createdAt = json.getString("created_at");
+	    tweet.tweetId = json.getLong("id");
 	    tweet.user = User.fromJson(json.getJSONObject("user"));
 	} catch (JSONException e) {
 	    e.printStackTrace();
